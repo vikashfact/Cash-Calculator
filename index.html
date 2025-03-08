@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cash Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+        .total, .currency-count {
+            font-size: 18px;
+            margin-top: 15px;
+            font-weight: bold;
+            padding: 10px;
+            background: #ffc107;
+            border-radius: 5px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 12px 20px;
+            font-size: 16px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+        @media (max-width: 480px) {
+            .container {
+                width: 90%;
+            }
+            input {
+                width: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Cash Calculator</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Denomination</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody id="denominations"></tbody>
+        </table>
+        <button onclick="calculateTotal()">Calculate Total</button>
+        <div class="total">Total: ₹<span id="total">0</span></div>
+        <div class="currency-count">Total Notes: <span id="count">0</span></div>
+    </div>
+    <script>
+        const denominations = [2000, 500, 200, 100, 50, 20, 10];
+        const tableBody = document.getElementById('denominations');
+        
+        denominations.forEach(value => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>₹${value}</td>
+                <td><input type="number" min="0" value="0" data-value="${value}"></td>
+                <td class="row-total">₹0</td>
+            `;
+            tableBody.appendChild(row);
+        });
+
+        function calculateTotal() {
+            let total = 0;
+            let count = 0;
+            document.querySelectorAll('#denominations tr').forEach(row => {
+                let input = row.querySelector('input');
+                let rowTotalCell = row.querySelector('.row-total');
+                let num = parseInt(input.value) || 0;
+                let denomination = parseInt(input.dataset.value);
+                let rowTotal = num * denomination;
+                rowTotalCell.textContent = `₹${rowTotal}`;
+                total += rowTotal;
+                count += num;
+            });
+            document.getElementById('total').innerText = total;
+            document.getElementById('count').innerText = count;
+        }
+    </script>
+</body>
+</html>
